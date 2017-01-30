@@ -10,7 +10,7 @@ class Cart extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'addtocartlist';
+        return 'addtocart';
     }
      
     /**

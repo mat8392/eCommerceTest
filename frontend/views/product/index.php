@@ -21,7 +21,8 @@ use yii\helpers\Html;
                                             <p><?= Html::a("<img src=' $field->image ' />", ['detail', 'id' => $field->id]); ?></p>
                                             <a class="title"><?= $field->productname; ?></a><br/>
                                             <a class="category"><?= $field->description; ?></a>
-                                            <p class="price">RM <?= $field->price; ?></p>
+                                            <p class="price">RM <?= number_format((float)$field->price, 2, '.', '');?></p>
+                                            <p class="price"><strike>RM <?= number_format((float)$field->priceretail, 2, '.', '');?></strike></p>
                                         </div>
                                     </li>
                                     <?php } ?>

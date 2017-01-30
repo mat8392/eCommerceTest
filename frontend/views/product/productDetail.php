@@ -13,28 +13,25 @@ use yii\helpers\ArrayHelper;
 			<div class="span9">
 				<div class="row">
 					<div class="span9">
-					<strong>Select the receiver's country : </strong><span><?= Html::activeDropDownList($model, 'id',$items) ?></span><br>
 					</div>
 				</div>
 				<div class="row">
 					<div class="span4">
-						<a href="<?= $field->image ?>" class="thumbnail" data-fancybox-group="group1" title="Description 1"><img alt="" src="themes/images/ladies/1.jpg"></a>
+						<a href='<?= $model->image ?>' class="thumbnail" data-fancybox-group="group1" title="Description 1"><img alt="" src='<?= $model->image ?>'></a>
 					</div>
 					<div class="span5">
 						<address>
 							<strong><?= $model->productname ?></strong><br>
 							<span><?= $model->description ?></span><br>								
 						</address>									
-						<h4><strong>Price: RM <?= $model->price ?></strong></h4>
+						<h4><strong>Price: RM <?= number_format((float)$model->price, 2, '.', '');?> &nbsp; <strike>RM <?= number_format((float)$model->priceretail, 2, '.', ''); ?></strike></strong></h4>
 					</div>
 					<div class="span5">
-					<?= Html::beginForm(['product/add'], 'post') ?>
+					<?= Html::beginForm(['product/addcart',  'id' => $model->id], 'post') ?>
 							<label>Qty:</label>
 							<input type="text" class="span1" name="quantitybeli" placeholder="1">
 							<button class="btn btn-inverse" type="submit">Add to cart</button>
-
-						</form>
-						<?= Html::endForm() ?>
+					<?= Html::endForm() ?>
 					</div>							
 				</div>
 			</div>

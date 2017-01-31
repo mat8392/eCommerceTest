@@ -163,54 +163,38 @@ class ProductController extends Controller
         $product = Checkout::find()->all();
 
         return $this->render('checkout', ['model' => $product]);
-        // $list = $_POST['id'];
-
-        // $myUpdate = "UPDATE addtocart where id in  $list )
-        // SET is_buy = 1 ";
-        //  \Yii::$app->db->createCommand($myUpdate)->execute(); 
-
-        // return $this->render('cart');
     }
 
-    // public function actionShippingopt($country, $list)
-    // {
-    //     $checkshipping = Country::find()->where(['id' => $shipping])->one();
-
-    //     $response_values = array(
-    //                 'country' => $checkshipping->name,
-    //                 'fee' =>  $checkshipping->fee,
-    //                 'description'=>$checkshipping->description
-    //                 );
-
-    //     return Response::json($response_values);;
-    // }
-
+    //ajax checking shipping fee
     public function actionShippingopt()
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
             $testing = count($data['idcart']);
+            $totalprice = $data['totalprice'];
+
+            if ($shipping == 1 && ( $totalprice < 150 || $testing  < 2)) {
+                $shippingfee = 10;
+            }elseif ($shipping == 3 && $totalprice < 300) {
+                $shippingfee = 25;
+            }elseif ($shipping == 2 && $totalprice < 300) {
+                $shippingfee = 20;
+            }else{
+                $shippingfee = 0;
+            }
+
+
 
             $checkshipping = Country::find()->where(['id' => $data['country']])->one();
 
-            return $testing;
+            return $shippingfee;
+            //     $response_values = array(
+    //                 'country' => $checkshipping->name,
+    //                 'fee' =>  $checkshipping->fee,
+    //                 'description'=>$checkshipping->description
+    //                 );
+            // return Response::json($response_values);
         }
     }
 }
-
-
-    // public function actionAjax()
-    // {
-    //     if(isset( Yii::$app->request->post('test') ) )
-    //     {
-    //         $test = "Ajax Worked!";
-    //     // do your query stuff here
-    //     }
-    //     else{
-    //         $test = "Ajax failed";
-    //         // do your query stuff here
-    //     }
-    //     // return Json    
-    //     return \yii\helpers\Json::encode($test);
-    // }
 

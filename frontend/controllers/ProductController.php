@@ -189,10 +189,11 @@ class ProductController extends Controller
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
-            echo $searchname= $searchname[0];
-            
+            $testing = count($data['idcart']);
 
-            return $data['test'];
+            $checkshipping = Country::find()->where(['id' => $data['country']])->one();
+
+            return $testing;
         }
     }
 }

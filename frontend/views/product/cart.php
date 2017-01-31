@@ -106,14 +106,15 @@ use yii\helpers\ArrayHelper;
 				// 	$('#pTest').text('test')
     // 			});
 	$("#shipping").change(function () {
-		alert(test);
+		var idcart = $("input[id='idcart']")
+              .map(function(){return $(this).val();}).get();
 		$.ajax({
 			url: 'index.php?r=product/shippingopt',
 			type: 'GET',
-			data: { 'test': test},
+			data: { 'country': $(this).val(), 'idcart': idcart},
 			datatype: "JSON",
 			success: function(data) {
-				alert(data);
+				$('#pTest').text(data);
 			},
 			error: function(passParams){
            		alert(passParams.error);

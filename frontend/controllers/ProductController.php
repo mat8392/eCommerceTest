@@ -183,8 +183,6 @@ class ProductController extends Controller
                 $shippingfee = 0;
             }
 
-
-
             $checkshipping = Country::find()->where(['id' => $data['country']])->one();
 
             return $shippingfee;

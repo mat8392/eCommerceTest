@@ -94,7 +94,7 @@ use yii\helpers\ArrayHelper;
 			$.ajax({
 				url: 'index.php?r=product/shippingopt',
 				type: 'GET',
-				data: { 'country': $(this).val(), 'idcart': idcart, totalprice: <?= $d; ?>},
+				data: { 'country': $(this).val(), 'idcart': idcart, totalprice: <?= $d; ?>, 'voucher': $("#voucher").val()},
 				datatype: "JSON",
 				success: function(data) {
 					$('#pTest').text(parseFloat(data).toFixed(2));

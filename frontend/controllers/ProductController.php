@@ -9,7 +9,9 @@ use app\models\Voucher;
 use app\models\Checkout;
 use yii\web\Controller;
 use yii\helpers\ArrayHelper;
-
+use yii\helpers\Json;
+use yii\helpers\VarDumper;
+use yii\db\Query;
 /**
  * manual CRUD
  **/
@@ -63,13 +65,13 @@ class ProductController extends Controller
             'image' => $productDetail->image
             ])->execute();
 
-        return $this->redirect(['cart']);;
+        return $this->redirect(['cart']);
     }
 
     public function actionCart()
     {
         //view the cart of product
-        $cart = Cart::find()->all();
+        $cart = Cart::find()->where("is_buy is null")->all();
         //for dropdown shipping
         $items = ArrayHelper::map(Country::find()->all(), 'id', 'name');
 
@@ -80,9 +82,16 @@ class ProductController extends Controller
     {
         $list = $_POST['idcart'];
 
-        foreach ($list as $value) {
-            $priceeach = Cart::find()->where(['id' => $value])->one();
-            $totalprice += ($priceeach->price*$priceeach->quantitybeli);
+        if (count($list == 1 )){
+            $priceeach = Cart::find()->where(['id' => $_POST['idcart']])->one();
+            $totalprice = ($priceeach->price*$priceeach->quantitybeli);
+
+        }else {
+
+            foreach ($list as $value) {
+                $priceeach = Cart::find()->where(['id' => $value])->one();
+                $totalprice += ($priceeach->price*$priceeach->quantitybeli);
+            }
         }
 
         // return $totalprice;
@@ -96,12 +105,16 @@ class ProductController extends Controller
             $checkvoucher = Voucher::find()->where(['name' => $voucher])->one();
             $checkvoucherid = $checkvoucher->id;
             if($checkvoucher === null){
-                throw new NotFoundHttpException('The items not exist.');
+                $checkvoucherid = "Voucher is not exist!";
+                $totalprice = $totalprice;
             }
             else{
                 if ($checkvoucher->type == 1 && count($list) >= 2) {
                     //this one is percentage
-                    $totalprice *= ($checkvoucher->discount/100);
+
+                    $dis = $totalprice;
+                    $dis *= ($checkvoucher->discount/100);
+                    $totalprice -=$dis;
                 }
                 elseif ($checkvoucher->type == 2 && $totalprice >= 100){
                     //this one is for ringgit
@@ -134,6 +147,8 @@ class ProductController extends Controller
             $shippingfee = 0;
         }
 
+        $totalprice = $totalprice + $shippingfee;
+
         Yii::$app->db->createCommand()->insert('checkout', [
             'voucher' => $checkvoucher->id,
             'shipping' => $shipping,
@@ -146,23 +161,65 @@ class ProductController extends Controller
         $maxid = Checkout::find()->where(['id' => Checkout::find()->max('id')])->one();
         $maxid->id;
 
-        foreach ($list as $value) {
+
+        if (count($list == 1 )){
+            $f=$list['0'];
             $myUpdate = "UPDATE addtocart
             SET is_buy = 1, checkoutid = $maxid->id
-            where id = $value";
+            where id = $f";
 
             $lala = Yii::$app->db->createCommand($myUpdate)->execute();
-        }
-        
+        }else {
+            foreach ($list as $value) {
+                $myUpdate = "UPDATE addtocart
+                SET is_buy = 1, checkoutid = $maxid->id
+                where id = $value";
 
-        return $this->render(['checkout']);
+                
+            }
+        }
+        return $this->redirect(['checkout']);
     }
 
     public function actionCheckout()
     {
-        $product = Checkout::find()->all();
+        //view the cart of product
+        // $checkout = Checkout::find()->all();
+        $query = new Query;
+        $query->select([
+            'c.id',
+         'v.name as voucher', 
+         'cn.name as shipping', 
+         'c.shippingfee as shippingfee', 
+         'c.discount as discount',
+         'c.discounttype as discounttype',
+         'c.totalprice as totalprice'
+         ])
+            ->from('checkout c')
+            ->leftJoin('voucher v', 'c.voucher = v.id')
+            ->leftJoin('country cn', 'c.shipping = cn.id');
+            // echo $query->createCommand()->sql;
+            // echo $query->createCommand()->getRawSql();
+        $command = $query->createCommand();
+        $checkout = $command->queryAll();
+        // var_dump($checkout);
+        // VarDumper::dump($checkout);
+        $y = array();
 
-        return $this->render('checkout', ['model' => $product]);
+        
+        // return $query->id;
+        // echo $query->createCommand()->sql;
+        // echo $query->createCommand()->getRawSql();
+        // return $t;
+
+        foreach ($checkout as $value) {
+            $cart = Cart::find()->where('is_buy = 1')->all();
+            // VarDumper::dump($cart);
+            $y[$value->id] = $cart;
+            // return $y[$value->id]->id;
+        }
+
+        return $this->render('checkout', ['checkout' => $checkout, 'model'=>$y]);
     }
 
     //ajax checking shipping fee
@@ -172,25 +229,153 @@ class ProductController extends Controller
             $data = Yii::$app->request->get();
             $testing = count($data['idcart']);
             $totalprice = $data['totalprice'];
+            $voucher = $data['voucher'];
+
+            $checkshipping = Country::find()->where(['id' => $data['country']])->one();
+            $descriptionship = $checkshipping->description;
 
             if ($shipping == 1 && ( $totalprice < 150 || $testing  < 2)) {
-                $shippingfee = 10;
+                $shippingfee = $checkshipping->fee;
             }elseif ($shipping == 3 && $totalprice < 300) {
-                $shippingfee = 25;
+                $shippingfee = $checkshipping->fee;
             }elseif ($shipping == 2 && $totalprice < 300) {
-                $shippingfee = 20;
+                $shippingfee = $checkshipping->fee;
             }else{
                 $shippingfee = 0;
             }
 
-            $checkshipping = Country::find()->where(['id' => $data['country']])->one();
+            if ($voucher != ""){
+            //checkvoucher in table
+                $checkvoucher = Voucher::find()->where(['name' => $voucher])->one();
+                $checkvoucherid = $checkvoucher->id;
+                if($checkvoucher === null){
+                    $checkvoucherid = "Voucher is not exist!";
+                    $totalprice = $totalprice;
+                }
+                else{
+                    if ($checkvoucher->type == 1 && count($list) >= 2) {
+                    //this one is percentage
+                        $dis = $totalprice;
+                        $dis *= ($checkvoucher->discount/100);
+                        $totalprice -=$dis;
+                        $descriptionvoucher = $checkvoucher->description;
+                    }
+                    elseif ($checkvoucher->type == 2 && $totalprice >= 100){
+                    //this one is for ringgit
+                        $dis = $totalprice;
+                        $dis -= $checkvoucher->discount ;
+                        $totalprice =$dis;
+                        $descriptionvoucher = $checkvoucher->description;
+                    }
+                    else{
+                        $dis = 0;
+                        $totalprice = $totalprice;
+                        $descriptionvoucher = "none";
+                    }
+                }
+            }
+            else
+            {
+                //voucher is not inputted
+                $dis = 0;
+                $descriptionvoucher = "none1";
+                $totalprice = $totalprice;
 
-            return $shippingfee;
-            //     $response_values = array(
-    //                 'country' => $checkshipping->name,
-    //                 'fee' =>  $checkshipping->fee,
-    //                 'description'=>$checkshipping->description
-    //                 );
+            }
+
+            $totalpricefinal = $totalprice + $shippingfee;
+
+            // return $shippingfee;
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $response_values = array(
+                'totalpricefinal' => $totalpricefinal,
+                'shippingfee' =>  $shippingfee,
+                'dis'=>$dis,
+                'descriptionvoucher'=>$descriptionvoucher,
+                'descriptionship'=>$descriptionship
+                );
+
+            return $response_values;
+                // return CJSON::encode($response_values);
+            // return Response::json($response_values);
+        }
+    }
+
+    //checking voucher
+    public function actionVouchopt()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->get();
+            $testing = count($data['idcart']);
+            $totalprice = $data['totalprice'];
+            $voucher = $data['voucher'];
+
+            $checkshipping = Country::find()->where(['id' => $data['country']])->one();
+            $descriptionship = $checkshipping->description;
+
+            if ($shipping == 1 && ( $totalprice < 150 || $testing  < 2)) {
+                $shippingfee = $checkshipping->fee;
+            }elseif ($shipping == 3 && $totalprice < 300) {
+                $shippingfee = $checkshipping->fee;
+            }elseif ($shipping == 2 && $totalprice < 300) {
+                $shippingfee = $checkshipping->fee;
+            }else{
+                $shippingfee = 0;
+            }
+
+            if ($voucher != ""){
+            //checkvoucher in table
+                $checkvoucher = Voucher::find()->where(['name' => $voucher])->one();
+                $checkvoucherid = $checkvoucher->id;
+                if($checkvoucher === null){
+                    $checkvoucherid = "Voucher is not exist!";
+                    $totalprice = $totalprice;
+                }
+                else{
+                    if ($checkvoucher->type == 1 && count($list) >= 2) {
+                    //this one is percentage
+                        $dis = $totalprice;
+                        $dis *= ($checkvoucher->discount/100);
+                        $totalprice -=$dis;
+                        $descriptionvoucher = $checkvoucher->description;
+                    }
+                    elseif ($checkvoucher->type == 2 && $totalprice >= 100){
+                    //this one is for ringgit
+                        $dis = $totalprice;
+                        $dis -= $checkvoucher->discount ;
+                        $totalprice = $dis;
+                        $descriptionvoucher = $checkvoucher->description;
+                    }
+                    else{
+                        $dis = 0;
+                        $totalprice = $totalprice;
+                        $descriptionvoucher = "none1";
+                    }
+                }
+            }
+            else
+            {
+            //voucher is not inputted
+                $dis = 0;
+                $descriptionvoucher = "none2";
+                $totalprice = $totalprice;
+
+            }
+
+            $totalpricefinal = $totalprice + $shippingfee;
+
+            // return $shippingfee;
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $response_values = array(
+                'totalpricefinal' => $totalpricefinal,
+                'shippingfee' =>  $shippingfee,
+                'dis'=>$dis,
+                'descriptionvoucher'=>$descriptionvoucher,
+                'descriptionship'=>$descriptionship
+                );
+
+            return $response_values;
+                // return CJSON::encode($response_values);
             // return Response::json($response_values);
         }
     }

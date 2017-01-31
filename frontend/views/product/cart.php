@@ -63,18 +63,19 @@ use yii\helpers\ArrayHelper;
 					<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
 					<label>
 						<strong>Select the receiver's country : </strong> <?= Html::dropDownList('shipping', null, $items, ['prompt' => 'Please Select','id' => 'shipping']) ?>
-						<!-- <p id="pTest">Male</p> -->
+						<p id="desship"></p>
 					</label>
 					<label>
-						<strong>Type Your Voucher : </strong><?= Html::input('text', 'voucher', null) ?>
-
+						<strong>Type Your Voucher : </strong><?= Html::input('text', 'voucher', null, ['id' => 'voucher']) ?>
+						<span><input type="button" onclick="doSomething()" value="Apply" /></span>
+						<p id="desvouch"></p>
 					</label>
 					<hr>
 					<p class="cart-total right">
 						<strong>Sub-Total</strong>:	RM <?= number_format((float)$d, 2, '.', '');?><br>
-						<strong>Coupon</strong>: $2.00<br>
+						<strong>You Save</strong>: <span id="coupon">N/A</span><br>
 						<strong>Ship Fee</strong>: <span id="pTest">N/A</span><br>
-						<strong>Total</strong>: $119.50<br>
+						<strong>Total</strong>: <span id="total"><?= number_format((float)$d, 2, '.', '');?></span><br>
 					</p>
 					<hr/>
 					<p class="buttons center">
@@ -86,24 +87,53 @@ use yii\helpers\ArrayHelper;
 		</section>			
 	</div>
 	<script type="text/javascript">
-	$(document).ready(function() {
+		$(document).ready(function() {
 
-		$("#shipping").change(function () {
-			var idcart = $("input[id='idcart']")
-			.map(function(){return $(this).val();}).get();
-			$.ajax({
-				url: 'index.php?r=product/shippingopt',
-				type: 'GET',
-				data: { 'country': $(this).val(), 'idcart': idcart, totalprice: <?= $d; ?>, 'voucher': $("#voucher").val()},
-				datatype: "JSON",
-				success: function(data) {
-					$('#pTest').text(parseFloat(data).toFixed(2));
-				},
-				error: function(passParams){
-					alert(passParams.error);
-				}
+			$("#shipping").change(function () {
+				var idcart = $("input[id='idcart']")
+				.map(function(){return $(this).val();}).get();
+				$.ajax({
+					url: 'index.php?r=product/shippingopt',
+					type: 'GET',
+					data: { 'country': $(this).val(), 'idcart': idcart, totalprice: <?= $d; ?>, 'voucher': $("#voucher").val()},
+					datatype: "JSON",
+					success: function(data) {
+						// alert(JSON.parse(data.shippingfee));
+						$('#pTest').text(parseFloat(data.shippingfee).toFixed(2));
+						$('#coupon').text(parseFloat(data.dis).toFixed(2));
+						$('#total').text(parseFloat(data.totalpricefinal).toFixed(2));
+						$('#desvouch').text(data.descriptionvoucher);
+						$('#desship').text(data.descriptionship);
+					},
+					error: function(passParams){
+						alert(passParams.error);
+					}
+				});
 			});
 		});
 
-	});
-</script>		
+		function doSomething() 
+		{ 
+			console.log($("#voucher").val());
+			console.log($("#shipping").val());
+			var idcart = $("input[id='idcart']")
+			.map(function(){return $(this).val();}).get();
+			$.ajax({
+				url: 'index.php?r=product/vouchopt',
+				type: 'GET',
+				data: { 'country': $("#shipping").val(), 'idcart': idcart, totalprice: <?= $d; ?>, 'voucher': $("#voucher").val()},
+				datatype: "JSON",
+				success: function(data) {
+						// alert(JSON.parse(data.shippingfee));
+						$('#pTest').text(parseFloat(data.shippingfee).toFixed(2));
+						$('#coupon').text(parseFloat(data.dis).toFixed(2));
+						$('#total').text(parseFloat(data.totalpricefinal).toFixed(2));
+						$('#desvouch').text(data.descriptionvoucher);
+						$('#desship').text(data.descriptionship);
+					},
+					error: function(passParams){
+						alert(passParams.error);
+					}
+				});
+		} 
+	</script>		

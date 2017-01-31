@@ -146,10 +146,10 @@ class ProductController extends Controller
         $maxid = Checkout::find()->where(['id' => Checkout::find()->max('id')])->one();
         $maxid->id;
 
-         foreach ($list as $value) {
+        foreach ($list as $value) {
             $myUpdate = "UPDATE addtocart
             SET is_buy = 1, checkoutid = $maxid->id
-             where id = $value";
+            where id = $value";
 
             $lala = Yii::$app->db->createCommand($myUpdate)->execute();
         }
@@ -171,6 +171,30 @@ class ProductController extends Controller
 
         // return $this->render('cart');
     }
+
+    // public function actionShippingopt($country, $list)
+    // {
+    //     $checkshipping = Country::find()->where(['id' => $shipping])->one();
+
+    //     $response_values = array(
+    //                 'country' => $checkshipping->name,
+    //                 'fee' =>  $checkshipping->fee,
+    //                 'description'=>$checkshipping->description
+    //                 );
+
+    //     return Response::json($response_values);;
+    // }
+
+    public function actionShippingopt()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->get();
+            echo $searchname= $searchname[0];
+            
+
+            return $data['test'];
+    }
+}
 }
 
 

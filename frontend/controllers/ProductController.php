@@ -169,13 +169,14 @@ class ProductController extends Controller
             where id = $f";
 
             $lala = Yii::$app->db->createCommand($myUpdate)->execute();
+            
         }else {
             foreach ($list as $value) {
                 $myUpdate = "UPDATE addtocart
                 SET is_buy = 1, checkoutid = $maxid->id
                 where id = $value";
 
-                
+                $lala = Yii::$app->db->createCommand($myUpdate)->execute();
             }
         }
         return $this->redirect(['checkout']);

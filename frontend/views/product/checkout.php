@@ -24,7 +24,7 @@ use yii\helpers\VarDumper;
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach($model[$check->id] as $field){ ?>		  
+						<?php $j = $check['id']; foreach($model[$j] as $field){ ?>		  
 						<tr>
 							<td>
 								<a href="<?= $field->image ?>"><img alt="" src="<?= $field->image ?>"></a>
@@ -49,7 +49,7 @@ use yii\helpers\VarDumper;
 							<td>&nbsp;</td>
 							<td>
 								<?php
-								foreach($model[$check->id] as $field){
+								foreach($model[$j] as $field){
 									$a = $field->quantitybeli;
 									$b = $field->price;
 									$c = $a*$b;

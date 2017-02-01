@@ -216,7 +216,8 @@ class ProductController extends Controller
         foreach ($checkout as $value) {
             $cart = Cart::find()->where('is_buy = 1')->all();
             // VarDumper::dump($cart);
-            $y[$value->id] = $cart;
+            $t = $value['id'];
+            $y[$t] = $cart;
             // return $y[$value->id]->id;
         }
 

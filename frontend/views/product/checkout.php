@@ -49,6 +49,7 @@ use yii\helpers\VarDumper;
 							<td>&nbsp;</td>
 							<td>
 								<?php
+								$d= 0;
 								foreach($model[$j] as $field){
 									$a = $field->quantitybeli;
 									$b = $field->price;

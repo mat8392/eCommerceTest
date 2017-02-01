@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use yii\helpers\VarDumper;
 ?>
 <div id="wrapper" class="container">				
 	<section class="header_text sub">
@@ -9,9 +10,9 @@ use yii\helpers\ArrayHelper;
 	<section class="main-content">				
 		<div class="row">
 		<!-- ibu dia -->
-		<?php foreach($checkout as $check){ ?>	
+		<?php foreach($jajaja as $check){ ?>	
 			<div class="span11">					
-				<h4 class="title"><span class="text"><strong>Your</strong> Cart</span></h4>
+				<h4 class="title"><span class="text"><strong>Your</strong> Cart <?= $i = 1; $i++;?></span></h4>
 				<table class="table table-striped">
 					<thead>
 						<tr>
@@ -60,11 +61,11 @@ use yii\helpers\ArrayHelper;
 						</tbody>
 					</table>
 					<label>
-						<strong>Select the receiver's country : <?= $check->shipping; ?>
+						<strong>Select the receiver's country : <?= $check['shipping']; ?>
 						<p id="desship"></p>
 					</label>
 					<label>
-						<strong>Type Your Voucher : </strong><?= $check->voucher; ?>
+						<strong>Type Your Voucher : </strong><?= $check['voucher']; ?>
 
 						<p id="desvouch"></p>
 					</label>
@@ -72,18 +73,18 @@ use yii\helpers\ArrayHelper;
 					<p class="cart-total right">
 						<strong>Sub-Total</strong>:	RM <?= number_format((float)$d, 2, '.', '');?><br>
 						<strong>You Save</strong>: <span id="coupon">
-						RM <?= number_format((float) $check->discount, 2, '.', '');?>
+						RM <?= number_format((float)$check['discount'], 2, '.', '');?>
 						</span><br>
 						<strong>Ship Fee</strong>: <span id="pTest">
-						RM <?= number_format((float) $check->shippingfee, 2, '.', '');?>
+						RM <?= number_format((float)$check['shippingfee'], 2, '.', '');?>
 						</span><br>
 						<strong>Total</strong>: <span id="total">
-						<?= number_format((float)$check->totalprice, 2, '.', '');?>
+						<?= number_format((float)$check['totalprice'], 2, '.', '');?>
 						</span><br>
 					</p>
 					<hr/>
 					<p class="buttons center">
-						<button class="btn btn-inverse" type="submit" id="checkout">Checkout</button>
+						<!-- <button class="btn btn-inverse" type="submit" id="checkout">Checkout</button> -->
 					</p>					
 				</div>
 				<?php } ?>	

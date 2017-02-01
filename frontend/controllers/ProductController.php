@@ -220,7 +220,7 @@ class ProductController extends Controller
             // return $y[$value->id]->id;
         }
 
-        return $this->render('checkout', ['checkout' => $checkout, 'model'=>$y]);
+        return $this->render('checkout', ['jajaja' => $checkout, 'model'=>$y]);
     }
 
     //ajax checking shipping fee

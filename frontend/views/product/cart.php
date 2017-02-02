@@ -48,6 +48,7 @@ use yii\helpers\ArrayHelper;
 							<td>&nbsp;</td>
 							<td>
 								<?php
+								$d = 0;
 								foreach($model as $field){
 									$a = $field->quantitybeli;
 									$b = $field->price;

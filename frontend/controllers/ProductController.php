@@ -128,16 +128,18 @@ class ProductController extends Controller
                 }
                 else{
                     $dis = 0;
-                    $descriptionvoucher = "none2";
                     $totalprice = $totalprice;
+                    $descriptionvoucher = "none1";
+                    
                 }
             }
-        }
-        else
-        {
+            else
+            {
             //voucher is not inputted
-            $checkvoucherid = null;
-            $totalprice = $totalprice;
+                $dis = 0;
+                $descriptionvoucher = "none2";
+                $totalprice = $totalprice;
+            }
 
         }
 

@@ -111,6 +111,7 @@ class ProductController extends Controller
                 $checkvoucherid = null;
                 $totalprice = $totalprice;
                 $descriptionvoucher  = "None";
+                $vouchertype = null;
 
             }
             else{
@@ -121,17 +122,20 @@ class ProductController extends Controller
                     $dis *= ($checkvoucher->discount/100);
                     $totalprice -=$dis;
                     $descriptionvoucher = $checkvoucher->description;
+                    $vouchertype = $voucher->type;
                 }
                 elseif ($checkvoucher->type == 2 && $totalprice >= 100){
                     //this one is for ringgit
                     $dis = $checkvoucher->discount;
                     $totalprice -= $dis ;
                     $descriptionvoucher = $checkvoucher->description;
+                     $vouchertype = $voucher->type;
                 }
                 else{
                     $dis = 0;
                     $totalprice = $totalprice;
                     $descriptionvoucher = "none1";
+                     $vouchertype = null;
                     
                 }
             }
@@ -167,7 +171,7 @@ class ProductController extends Controller
             'shipping' => $shipping,
             'shippingfee' => $shippingfee,
             'discount' => $dis,
-            'discounttype' =>$voucher->type,
+            'discounttype' =>$vouchertype,
             'totalprice' => $totalprice
             ])->execute();
 

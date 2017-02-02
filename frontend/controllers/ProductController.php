@@ -108,7 +108,7 @@ class ProductController extends Controller
             if($checkvoucher === null){
 
                 $dis = 0;
-                $checkvoucherid = "Voucher is not exist!";
+                $checkvoucherid = null;
                 $totalprice = $totalprice;
                 $descriptionvoucher  = "None";
 
@@ -116,6 +116,7 @@ class ProductController extends Controller
             else{
                 if ($checkvoucher->type == 1 && count($list) >= 2) {
                     //this one is percentage
+                    // $dis = $checkvoucher->discount;
                     $dis = $totalprice;
                     $dis *= ($checkvoucher->discount/100);
                     $totalprice -=$dis;
@@ -123,9 +124,8 @@ class ProductController extends Controller
                 }
                 elseif ($checkvoucher->type == 2 && $totalprice >= 100){
                     //this one is for ringgit
-                    $dis = $totalprice;
-                    $dis -= $checkvoucher->discount ;
-                    $totalprice =$dis;
+                    $dis = $checkvoucher->discount;
+                    $totalprice -= $dis ;
                     $descriptionvoucher = $checkvoucher->description;
                 }
                 else{
@@ -163,10 +163,10 @@ class ProductController extends Controller
         $totalprice = $totalprice + $shippingfee;
 
         Yii::$app->db->createCommand()->insert('checkout', [
-            'voucher' => $checkvoucher->id,
+            'voucher' => $checkvoucherid,
             'shipping' => $shipping,
             'shippingfee' => $shippingfee,
-            'discount' => $checkvoucher->discount,
+            'discount' => $dis,
             'discounttype' =>$voucher->type,
             'totalprice' => $totalprice
             ])->execute();
@@ -266,7 +266,7 @@ class ProductController extends Controller
                 
                 if($checkvoucher === null){
                     $dis = 0;
-                    $checkvoucherid = "Voucher is not exist!";
+                    $checkvoucherid = null;
                     $totalprice = $totalprice;
                     $descriptionvoucher  = "None";
                 }
@@ -348,7 +348,7 @@ class ProductController extends Controller
 
                 if($checkvoucher === null){
                     $dis = 0;
-                    $checkvoucherid = "Voucher is not exist!";
+                    $checkvoucherid = null;
                     $totalprice = $totalprice;
                     $descriptionvoucher  = "None";
                 }

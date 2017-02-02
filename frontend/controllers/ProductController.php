@@ -147,6 +147,7 @@ class ProductController extends Controller
         $descriptionvoucher = "none2";
         $totalprice = $totalprice;
         $checkvoucherid = null;
+        $vouchertype = null;
     }
 
 

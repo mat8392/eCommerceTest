@@ -247,7 +247,7 @@ class ProductController extends Controller
                 $shippingfee = 0;
             }
 
-            if ($voucher != ""){
+            if (!is_null($voucher)){
             //checkvoucher in table
                 $checkvoucher = Voucher::find()->where(['name' => $voucher])->one();
                 $checkvoucherid = $checkvoucher->id;
@@ -327,7 +327,7 @@ class ProductController extends Controller
                 $shippingfee = 0;
             }
 
-            if ($voucher != ""){
+            if (!is_null($voucher)){
             //checkvoucher in table
                 $checkvoucher = Voucher::find()->where(['name' => $voucher])->one();
                 $checkvoucherid = $checkvoucher->id;

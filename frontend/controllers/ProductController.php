@@ -255,6 +255,7 @@ class ProductController extends Controller
                     $dis = 0;
                     $checkvoucherid = "Voucher is not exist!";
                     $totalprice = $totalprice;
+                    $descriptionvoucher  = "None";
                 }
                 else{
                     if ($checkvoucher->type == 1 && count($list) >= 2) {
@@ -336,6 +337,7 @@ class ProductController extends Controller
                     $dis = 0;
                     $checkvoucherid = "Voucher is not exist!";
                     $totalprice = $totalprice;
+                    $descriptionvoucher  = "None";
                 }
                 else{
                     if ($checkvoucher->type == 1 && count($list) >= 2) {

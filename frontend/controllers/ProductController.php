@@ -250,7 +250,7 @@ class ProductController extends Controller
             if ($voucher != ""){
             //checkvoucher in table
                 $checkvoucher = Voucher::find()->where(['name' => $voucher])->one();
-                $checkvoucherid = $checkvoucher->id;
+                
                 if($checkvoucher === null){
                     $checkvoucherid = "Voucher is not exist!";
                     $totalprice = $totalprice;
@@ -330,7 +330,7 @@ class ProductController extends Controller
             if ($voucher != ""){
             //checkvoucher in table
                 $checkvoucher = Voucher::find()->where(['name' => $voucher])->one();
-                $checkvoucherid = $checkvoucher->id;
+                
                 if($checkvoucher === null){
                     $checkvoucherid = "Voucher is not exist!";
                     $totalprice = $totalprice;

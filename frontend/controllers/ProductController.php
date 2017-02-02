@@ -99,7 +99,7 @@ class ProductController extends Controller
         // return $totalprice;
 
     $voucher = $_POST['voucher'];
-    
+
 
         //checkvoucher is inputted
     if ($voucher != ""){
@@ -136,7 +136,7 @@ class ProductController extends Controller
                 $totalprice = $totalprice;
                 $descriptionvoucher = "none1";
                 $vouchertype = null;
-                
+
             }
         }
     }
@@ -146,9 +146,10 @@ class ProductController extends Controller
         $dis = 0;
         $descriptionvoucher = "none2";
         $totalprice = $totalprice;
+        $checkvoucherid = null;
     }
 
-    
+
 
 
     $shipping = $_POST['shipping'];
@@ -186,7 +187,7 @@ class ProductController extends Controller
         where id = $f";
 
         $lala = Yii::$app->db->createCommand($myUpdate)->execute();
-        
+
     }else {
         foreach ($list as $value) {
             $myUpdate = "UPDATE addtocart
@@ -224,7 +225,7 @@ public function actionCheckout()
         // VarDumper::dump($checkout);
     $y = array();
 
-    
+
         // return $query->id;
         // echo $query->createCommand()->sql;
         // echo $query->createCommand()->getRawSql();
@@ -272,7 +273,7 @@ public function actionShippingopt()
         if ($voucher != ""){
             //checkvoucher in table
             $checkvoucher = Voucher::find()->where(['name' => $voucher])->one();
-            
+
             if($checkvoucher === null){
                 $dis = 0;
                 $checkvoucherid = null;

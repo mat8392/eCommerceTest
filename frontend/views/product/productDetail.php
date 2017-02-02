@@ -29,7 +29,7 @@ use yii\helpers\ArrayHelper;
 					<div class="span5">
 					<?= Html::beginForm(['product/addcart',  'id' => $model->id], 'post') ?>
 							<label>Qty:</label>
-							<input type="text" required class="control-label required" name="quantitybeli" placeholder="1">
+							<input type="text" required class="span1 control-label required" name="quantitybeli" placeholder="1">
 							<button class="btn btn-inverse" type="submit">Add to cart</button>
 					<?= Html::endForm() ?>
 					</div>							

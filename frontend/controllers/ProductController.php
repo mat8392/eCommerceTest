@@ -81,6 +81,7 @@ class ProductController extends Controller
     public function actionCheckoutprocess()
     {
         $list = $_POST['idcart'];
+        $totalprice = 0;
 
         if (count($list) == 1 ){
             $priceeach = Cart::find()->where(['id' => $_POST['idcart']])->one();
@@ -89,7 +90,6 @@ class ProductController extends Controller
         }else {
 
            // return VarDumper::dump($list);;
-
            foreach ($list as $value) {
             $priceeach = Cart::find()->where(['id' => $value])->one();
             $totalprice += ($priceeach->price*$priceeach->quantitybeli);

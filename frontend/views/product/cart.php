@@ -80,7 +80,7 @@ use yii\helpers\ArrayHelper;
 					</p>
 					<hr/>
 					<p class="buttons center">
-						<button class="btn btn-inverse" type="submit" id="checkout">Checkout</button>
+						<a href="index.php?r=product"><input type="button" href="index.php?r=product" value="Continue Shopping" class="btn btn-inverse" /></a>&nbsp;<button class="btn btn-inverse" type="submit" id="checkout">Checkout</button>
 					</p>					
 				</div>
 			</div>

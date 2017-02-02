@@ -14,7 +14,7 @@ use yii\helpers\VarDumper;
 		$i = 1;
 		foreach($jajaja as $check){ ?>	
 			<div class="span11">					
-				<h4 class="title"><span class="text"><strong>Your</strong> Order <?= $i++;?></span></h4>
+				<h4 class="title"><span class="text"><strong>Your</strong> Previous Purchase <?= $i++;?></span></h4>
 				<table class="table table-striped">
 					<thead>
 						<tr>

@@ -104,22 +104,31 @@ class ProductController extends Controller
             //checkvoucher in table
             $checkvoucher = Voucher::find()->where(['name' => $voucher])->one();
             if($checkvoucher === null){
+
+                $dis = 0;
                 $checkvoucherid = "Voucher is not exist!";
                 $totalprice = $totalprice;
+                $descriptionvoucher  = "None";
+
             }
             else{
                 if ($checkvoucher->type == 1 && count($list) >= 2) {
                     //this one is percentage
-
                     $dis = $totalprice;
                     $dis *= ($checkvoucher->discount/100);
                     $totalprice -=$dis;
+                    $descriptionvoucher = $checkvoucher->description;
                 }
                 elseif ($checkvoucher->type == 2 && $totalprice >= 100){
                     //this one is for ringgit
-                    $totalprice -= $checkvoucher->discount ;
+                    $dis = $totalprice;
+                    $dis -= $checkvoucher->discount ;
+                    $totalprice =$dis;
+                    $descriptionvoucher = $checkvoucher->description;
                 }
                 else{
+                    $dis = 0;
+                    $descriptionvoucher = "none2";
                     $totalprice = $totalprice;
                 }
             }
@@ -188,16 +197,16 @@ class ProductController extends Controller
         $query = new Query;
         $query->select([
             'c.id',
-         'v.name as voucher', 
-         'cn.name as shipping', 
-         'c.shippingfee as shippingfee', 
-         'c.discount as discount',
-         'c.discounttype as discounttype',
-         'c.totalprice as totalprice'
-         ])
-            ->from('checkout c')
-            ->leftJoin('voucher v', 'c.voucher = v.id')
-            ->leftJoin('country cn', 'c.shipping = cn.id');
+            'v.name as voucher', 
+            'cn.name as shipping', 
+            'c.shippingfee as shippingfee', 
+            'c.discount as discount',
+            'c.discounttype as discounttype',
+            'c.totalprice as totalprice'
+            ])
+        ->from('checkout c')
+        ->leftJoin('voucher v', 'c.voucher = v.id')
+        ->leftJoin('country cn', 'c.shipping = cn.id');
             // echo $query->createCommand()->sql;
             // echo $query->createCommand()->getRawSql();
         $command = $query->createCommand();

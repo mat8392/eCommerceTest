@@ -88,7 +88,7 @@ class ProductController extends Controller
 
         }else {
 
-           return VarDumper::dump($list);;
+           // return VarDumper::dump($list);;
 
            foreach ($list as $value) {
             $priceeach = Cart::find()->where(['id' => $value])->one();

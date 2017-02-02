@@ -232,6 +232,7 @@ class ProductController extends Controller
             $testing = count($data['idcart']);
             $totalprice = $data['totalprice'];
             $voucher = $data['voucher'];
+            $shipping = $data['country'];
 
             $checkshipping = Country::find()->where(['id' => $data['country']])->one();
             $descriptionship = $checkshipping->description;

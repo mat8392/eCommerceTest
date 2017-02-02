@@ -10,9 +10,11 @@ use yii\helpers\VarDumper;
 	<section class="main-content">				
 		<div class="row">
 		<!-- ibu dia -->
-		<?php foreach($jajaja as $check){ ?>	
+		<?php 
+		$i = 1;
+		foreach($jajaja as $check){ ?>	
 			<div class="span11">					
-				<h4 class="title"><span class="text"><strong>Your</strong> Cart <?= $i = 1; $i++;?></span></h4>
+				<h4 class="title"><span class="text"><strong>Your</strong> Order <?= $i++;?></span></h4>
 				<table class="table table-striped">
 					<thead>
 						<tr>

@@ -82,11 +82,13 @@ class ProductController extends Controller
     {
         $list = $_POST['idcart'];
 
-        if (count($list == 1 )){
+        if (count($list) == 1 ){
             $priceeach = Cart::find()->where(['id' => $_POST['idcart']])->one();
             $totalprice = ($priceeach->price*$priceeach->quantitybeli);
 
         }else {
+
+             return VarDumper::dump($list);;
 
             foreach ($list as $value) {
                 $priceeach = Cart::find()->where(['id' => $value])->one();
@@ -133,15 +135,16 @@ class ProductController extends Controller
                     
                 }
             }
-            else
-            {
-            //voucher is not inputted
-                $dis = 0;
-                $descriptionvoucher = "none2";
-                $totalprice = $totalprice;
-            }
-
         }
+        else
+        {
+            //voucher is not inputted
+            $dis = 0;
+            $descriptionvoucher = "none2";
+            $totalprice = $totalprice;
+        }
+
+        
 
 
         $shipping = $_POST['shipping'];
@@ -172,7 +175,7 @@ class ProductController extends Controller
         $maxid->id;
 
 
-        if (count($list == 1 )){
+        if (count($list) == 1){
             $f=$list['0'];
             $myUpdate = "UPDATE addtocart
             SET is_buy = 1, checkoutid = $maxid->id

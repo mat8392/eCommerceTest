@@ -59,7 +59,7 @@ use yii\helpers\ArrayHelper;
 					<h4>What would you like to do next?</h4>
 					<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
 					<label>
-						<strong>Select the receiver's country : </strong> <?= Html::dropDownList('shipping', null, $items, ['prompt' => 'Please Select','id' => 'shipping']) ?>
+						<strong>Select the receiver's country : </strong> <?= Html::dropDownList('shipping', null, $items, ['prompt' => 'Please Select','id' => 'shipping', 'required'=>'required']) ?>
 						<p id="desship"></p>
 					</label>
 					<label>

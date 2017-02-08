@@ -122,6 +122,7 @@ class ProductController extends Controller
                     $totalprice -=$dis;
                     $descriptionvoucher = $checkvoucher->description;
                     $vouchertype = $checkvoucher->type;
+                    $checkvoucherid = $checkvoucher->id;
                 }
                 elseif ($checkvoucher->type == 2 && $totalprice >= 100){
                     //this one is for ringgit
@@ -129,6 +130,7 @@ class ProductController extends Controller
                     $totalprice -= $dis ;
                     $descriptionvoucher = $checkvoucher->description;
                     $vouchertype = $checkvoucher->type;
+                    $checkvoucherid = $checkvoucher->id;
                 }
                 else{
                     $dis = 0;

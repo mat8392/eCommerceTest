@@ -12,7 +12,8 @@ use yii\helpers\VarDumper;
 		<!-- ibu dia -->
 		<?php 
 		$i = 1;
-		foreach($jajaja as $check){ ?>	
+		$totalprice = 0;
+		foreach($checkout as $check){ ?>	
 			<div class="span11">					
 				<h4 class="title"><span class="text"><strong>Your</strong> Previous Purchase <?= $i++;?></span></h4>
 				<table class="table table-striped">
@@ -26,21 +27,22 @@ use yii\helpers\VarDumper;
 						</tr>
 					</thead>
 					<tbody>
-						<?php $j = $check['id']; foreach($model[$j] as $field){ ?>		  
+						<?php $checkoutid = $check['id']; foreach($cart[$checkoutid] as $cartlist){ ?>		  
 						<tr>
 							<td>
-								<a href="<?= $field->image ?>"><img alt="" src="<?= $field->image ?>"></a>
+								<a href="<?= $cartlist->image ?>"><img alt="" src="<?= $cartlist->image ?>"></a>
 							</td>
-							<td><?= $field->productname; ?></td>
-							<td><?= $field->quantitybeli; ?></td>
-							<td>RM <?= number_format((float)$field->price, 2, '.', '');?> <br> <strike>RM <?= number_format((float)$field->priceretail, 2, '.', '');?></strike></td>
+							<td><?= $cartlist->productname; ?></td>
+							<td><?= $cartlist->quantitybeli; ?></td>
+							<td>RM <?= number_format((float)$cartlist->price, 2, '.', '');?> <br> <strike>RM <?= number_format((float)$cartlist->priceretail, 2, '.', '');?></strike></td>
 							<td>
 								<?php
-								$a = $field->quantitybeli;
-								$b = $field->price;
-								$c = $a*$b;
+								$itemquantity = $cartlist->quantitybeli;
+								$itemprice = $cartlist->price;
+								$totalitemprice = $itemquantity*$itemprice;
+								$totalprice += $totalitemprice;
 								?>
-								<?= number_format((float)$c, 2, '.', '');?>
+								<?= number_format((float)$totalitemprice, 2, '.', '');?>
 							</td>
 						</tr>
 						<?php } ?>
@@ -50,16 +52,7 @@ use yii\helpers\VarDumper;
 							<td>&nbsp;</td>
 							<td>&nbsp;</td>
 							<td>
-								<?php
-								$d= 0;
-								foreach($model[$j] as $field){
-									$a = $field->quantitybeli;
-									$b = $field->price;
-									$c = $a*$b;
-									$d += $c;
-								}
-								?>
-								<strong><?= number_format((float)$d, 2, '.', '');?></strong></td>
+								<strong><?= number_format((float)$totalprice, 2, '.', '');?></strong></td>
 							</tr>		  
 						</tbody>
 					</table>
@@ -74,7 +67,7 @@ use yii\helpers\VarDumper;
 					</label>
 					<hr>
 					<p class="cart-total right">
-						<strong>Sub-Total</strong>:	RM <?= number_format((float)$d, 2, '.', '');?><br>
+						<strong>Sub-Total</strong>:	RM <?= number_format((float)$totalprice, 2, '.', '');?><br>
 						<strong>You Save</strong>: <span id="coupon">
 						RM <?= number_format((float)$check['discount'], 2, '.', '');?>
 						</span><br>

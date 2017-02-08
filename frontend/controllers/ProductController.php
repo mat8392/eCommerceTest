@@ -237,11 +237,11 @@ class ProductController extends Controller
             $t = $value['id'];
             $cart = Cart::find()->where('is_buy = 1')->andWhere("checkoutid = $t")->all();
             // VarDumper::dump($cart);            
-            $y[$t] = $cart;
+            $cartarray[$t] = $cart;
             // return $y[$value->id]->id;
         }
 
-        return $this->render('checkout', ['jajaja' => $checkout, 'model'=>$y]);
+        return $this->render('checkout', ['checkout' => $checkout, 'cart'=>$cartarray]);
     }
 
     //ajax checking shipping fee

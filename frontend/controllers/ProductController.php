@@ -219,7 +219,7 @@ class ProductController extends Controller
         ->from('checkout c')
         ->leftJoin('voucher v', 'c.voucher = v.id')
         ->leftJoin('country cn', 'c.shipping = cn.id')
-        ->orderBy('id ASC');
+        ->orderBy('id DESC');
             // echo $query->createCommand()->sql;
             // echo $query->createCommand()->getRawSql();
         $command = $query->createCommand();

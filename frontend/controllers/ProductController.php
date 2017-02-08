@@ -218,7 +218,8 @@ class ProductController extends Controller
             ])
         ->from('checkout c')
         ->leftJoin('voucher v', 'c.voucher = v.id')
-        ->leftJoin('country cn', 'c.shipping = cn.id');
+        ->leftJoin('country cn', 'c.shipping = cn.id')
+        ->orderBy('id ASC');
             // echo $query->createCommand()->sql;
             // echo $query->createCommand()->getRawSql();
         $command = $query->createCommand();
@@ -241,7 +242,7 @@ class ProductController extends Controller
             // return $y[$value->id]->id;
             }
         }
-        
+
 
         return $this->render('checkout', ['jajaja' => $checkout, 'model'=>$y]);
     }

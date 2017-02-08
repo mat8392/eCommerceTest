@@ -33,9 +33,9 @@ use yii\helpers\ArrayHelper;
 							<td>RM <?= number_format((float)$field->price, 2, '.', '');?> <br> <strike>RM <?= number_format((float)$field->priceretail, 2, '.', '');?></strike></td>
 							<td>
 								<?php
-								$quantitybeli = $field->quantitybeli;
-								$price = $field->price;
-								$subtotalprice = $quantitybeli*$price;
+								$a = $field->quantitybeli;
+								$b = $field->price;
+								$c = $a*$b;
 								?>
 								<?= number_format((float)$c, 2, '.', '');?>
 							</td>
@@ -50,13 +50,13 @@ use yii\helpers\ArrayHelper;
 								<?php
 								$d = 0;
 								foreach($model as $field){
-									$quantitybeli = $field->quantitybeli;
-									$price = $field->price;
-									$subtotalprice = $quantitybeli*$price;
-									$totalprice += $c;
+									$a = $field->quantitybeli;
+									$b = $field->price;
+									$c = $a*$b;
+									$d += $c;
 								}
 								?>
-								<strong><?= number_format((float)$totalprice, 2, '.', '');?></strong></td>
+								<strong><?= number_format((float)$d, 2, '.', '');?></strong></td>
 							</tr>		  
 						</tbody>
 					</table>
@@ -73,10 +73,10 @@ use yii\helpers\ArrayHelper;
 					</label>
 					<hr>
 					<p class="cart-total right">
-						<strong>Sub-Total</strong>:	RM <?= number_format((float)$totalprice, 2, '.', '');?><br>
+						<strong>Sub-Total</strong>:	RM <?= number_format((float)$d, 2, '.', '');?><br>
 						<strong>You Save</strong>: <span id="coupon">N/A</span><br>
 						<strong>Ship Fee</strong>: <span id="pTest">N/A</span><br>
-						<strong>Total</strong>: <span id="total"><?= number_format((float)$totalprice, 2, '.', '');?></span><br>
+						<strong>Total</strong>: <span id="total"><?= number_format((float)$d, 2, '.', '');?></span><br>
 					</p>
 					<hr/>
 					<p class="buttons center">

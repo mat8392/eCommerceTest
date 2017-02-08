@@ -232,13 +232,17 @@ class ProductController extends Controller
         // echo $query->createCommand()->sql;
         // echo $query->createCommand()->getRawSql();
         // return $t;
-
-        foreach ($checkout as $value) {
-            $t = $value['id'];
-            $cart = Cart::find()->where('is_buy = 1')->andWhere("checkoutid = $t")->all();
+        if ($checkout) {
+            foreach ($checkout as $value) {
+                $t = $value['id'];
+                $cart = Cart::find()->where('is_buy = 1')->andWhere("checkoutid = $t")->all();
             // VarDumper::dump($cart);            
-            $cartarray[$t] = $cart;
+                $cartarray[$t] = $cart;
             // return $y[$value->id]->id;
+            }
+        }
+        else {
+            $cartarray = null;
         }
 
         return $this->render('checkout', ['checkout' => $checkout, 'cart'=>$cartarray]);

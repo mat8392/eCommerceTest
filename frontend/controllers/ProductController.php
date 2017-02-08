@@ -81,7 +81,10 @@ class ProductController extends Controller
     public function actionCheckoutprocess()
     {
         $list = $_POST['idcart'];
+        $voucher = $_POST['voucher'];
         $totalprice = 0;
+
+        $quantitybeli = Cart::find()->where(['id' => $list])->sum('quantitybeli');
 
         if (count($list) == 1 ){
             $priceeach = Cart::find()->where(['id' => $_POST['idcart']])->one();
@@ -95,15 +98,12 @@ class ProductController extends Controller
             }
         }
 
-        // return $totalprice;
-
-        $voucher = $_POST['voucher'];
-
-
         //checkvoucher is inputted
         if ($voucher != ""){
+
             //checkvoucher in table
             $checkvoucher = Voucher::find()->where(['name' => $voucher])->one();
+
             if($checkvoucher === null){
 
                 $dis = 0;
@@ -114,7 +114,7 @@ class ProductController extends Controller
 
             }
             else{
-                if ($checkvoucher->type == 1 && count($list) >= 2) {
+                if ($checkvoucher->type == 1 && $quantitybeli >= 2) {
                     //this one is percentage
                     // $dis = $checkvoucher->discount;
                     $dis = $totalprice;
@@ -154,7 +154,7 @@ class ProductController extends Controller
         $shipping = $_POST['shipping'];
         $checkshipping = Country::find()->where(['id' => $shipping])->one();
 
-        if ($shipping == 1 && ( $totalprice < 150 || count($list) < 2)) {
+        if ($shipping == 1 && ( $totalprice < 150 || $quantitybeli < 2)) {
             $shippingfee = 10;
         }elseif ($shipping == 3 && $totalprice < 300) {
             $shippingfee = 25;
@@ -416,9 +416,7 @@ class ProductController extends Controller
                 'shippingfee' =>  $shippingfee,
                 'dis'=>$dis,
                 'descriptionvoucher'=>$descriptionvoucher,
-                'descriptionship'=>$descriptionship,
-                'quantitybeli'=>$quantitybeli,
-                'voucher'=>$quantitybeli
+                'descriptionship'=>$descriptionship
                 );
 
             return $response_values;

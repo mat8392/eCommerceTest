@@ -87,7 +87,9 @@ use yii\helpers\VarDumper;
 					</p>
 					<hr/>
 					<p class="buttons center">
-						<!-- <button class="btn btn-inverse" type="submit" id="checkout">Checkout</button> -->
+						<p class="buttons center">
+						<a href="index.php?r=product"><input type="button" href="index.php?r=product" value="Continue Shopping" class="btn btn-inverse" /></a>
+					</p>
 					</p>					
 				</div>
 				<?php } ?>	

@@ -251,12 +251,16 @@ class ProductController extends Controller
             $totalprice = $data['totalprice'];
             $voucher = $data['voucher'];
             $shipping = $data['country'];
+            $idcart = $data['idcart'];
+
+            //check quantity buy
+            $quantitybeli = Cart::find()->where(['id' => $idcart])->sum('quantitybeli');
 
             if ($shipping != ""){
                 $checkshipping = Country::find()->where(['id' => $data['country']])->one();
                 $descriptionship = $checkshipping->description;
 
-                if ($shipping == 1 && ( $totalprice < 150 || $testing  < 2)) {
+                if ($shipping == 1 && ( $totalprice < 150 || $quantitybeli  < 2)) {
                     $shippingfee = $checkshipping->fee;
                 }elseif ($shipping == 3 && $totalprice < 300) {
                     $shippingfee = $checkshipping->fee;
@@ -278,10 +282,10 @@ class ProductController extends Controller
                     $dis = 0;
                     $checkvoucherid = null;
                     $totalprice = $totalprice;
-                    $descriptionvoucher  = "None";
+                    $descriptionvoucher  = "Voucher is Invalid";
                 }
                 else{
-                    if ($checkvoucher->type == 1 && count($list) >= 2) {
+                    if ($checkvoucher->type == 1 && $quantitybeli >= 2) {
                     //this one is percentage
                         $dis = $totalprice;
                         $dis *= ($checkvoucher->discount/100);
@@ -298,7 +302,7 @@ class ProductController extends Controller
                     else{
                         $dis = 0;
                         $totalprice = $totalprice;
-                        $descriptionvoucher = "none";
+                        $descriptionvoucher = "Check again your cart. ".$checkvoucher->description;
                     }
                 }
             }
@@ -306,7 +310,7 @@ class ProductController extends Controller
             {
                 //voucher is not inputted
                 $dis = 0;
-                $descriptionvoucher = "none1";
+                $descriptionvoucher = "Voucher is not inputted";
                 $totalprice = $totalprice;
 
             }
@@ -338,12 +342,16 @@ class ProductController extends Controller
             $totalprice = $data['totalprice'];
             $voucher = $data['voucher'];
             $shipping = $data['country'];
+            $idcart = $data['idcart'];
+
+            //check quantity buy
+            $quantitybeli = Cart::find()->where(['id' => $idcart])->sum('quantitybeli');
 
             if ($shipping != ""){
                 $checkshipping = Country::find()->where(['id' => $data['country']])->one();
                 $descriptionship = $checkshipping->description;
 
-                if ($shipping == 1 && ( $totalprice < 150 || $testing  < 2)) {
+                if ($shipping == 1 && ( $totalprice < 150 || $quantitybeli  < 2)) {
                     $shippingfee = $checkshipping->fee;
                 }elseif ($shipping == 3 && $totalprice < 300) {
                     $shippingfee = $checkshipping->fee;
@@ -361,14 +369,15 @@ class ProductController extends Controller
             //checkvoucher in table
                 $checkvoucher = Voucher::find()->where(['name' => $voucher])->one();
 
+
                 if($checkvoucher === null){
                     $dis = 0;
                     $checkvoucherid = null;
                     $totalprice = $totalprice;
-                    $descriptionvoucher  = "None";
+                    $descriptionvoucher  = "Voucher is Invalid";
                 }
                 else{
-                    if ($checkvoucher->type == 1 && count($list) >= 2) {
+                    if ($checkvoucher->type == 1 && $quantitybeli >= 2) {
                     //this one is percentage
                         $dis = $totalprice;
                         $dis *= ($checkvoucher->discount/100);
@@ -385,7 +394,7 @@ class ProductController extends Controller
                     else{
                         $dis = 0;
                         $totalprice = $totalprice;
-                        $descriptionvoucher = "none1";
+                        $descriptionvoucher = "Check again your cart. ".$checkvoucher->description;
                     }
                 }
             }
@@ -393,7 +402,7 @@ class ProductController extends Controller
             {
             //voucher is not inputted
                 $dis = 0;
-                $descriptionvoucher = "none2";
+                $descriptionvoucher = "Voucher is not Inputted";
                 $totalprice = $totalprice;
 
             }
@@ -407,7 +416,9 @@ class ProductController extends Controller
                 'shippingfee' =>  $shippingfee,
                 'dis'=>$dis,
                 'descriptionvoucher'=>$descriptionvoucher,
-                'descriptionship'=>$descriptionship
+                'descriptionship'=>$descriptionship,
+                'quantitybeli'=>$quantitybeli,
+                'voucher'=>$quantitybeli
                 );
 
             return $response_values;

@@ -126,6 +126,7 @@ use yii\helpers\ArrayHelper;
 				datatype: "JSON",
 				success: function(data) {
 						// alert(JSON.parse(data.shippingfee));
+						alert(data.voucher);
 						$('#pTest').text(parseFloat(data.shippingfee).toFixed(2));
 						$('#coupon').text(parseFloat(data.dis).toFixed(2));
 						$('#total').text(parseFloat(data.totalpricefinal).toFixed(2));

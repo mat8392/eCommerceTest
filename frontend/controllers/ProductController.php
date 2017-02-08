@@ -121,14 +121,14 @@ class ProductController extends Controller
                     $dis *= ($checkvoucher->discount/100);
                     $totalprice -=$dis;
                     $descriptionvoucher = $checkvoucher->description;
-                    $vouchertype = $voucher->type;
+                    $vouchertype = $checkvoucher->type;
                 }
                 elseif ($checkvoucher->type == 2 && $totalprice >= 100){
                     //this one is for ringgit
                     $dis = $checkvoucher->discount;
                     $totalprice -= $dis ;
                     $descriptionvoucher = $checkvoucher->description;
-                    $vouchertype = $voucher->type;
+                    $vouchertype = $checkvoucher->type;
                 }
                 else{
                     $dis = 0;
